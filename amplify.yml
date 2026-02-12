@@ -7,15 +7,17 @@ frontend:
         - npm install --legacy-peer-deps
         # Compilar paquete shared primero
         - cd packages/shared && npm run build && cd ../..
-        # Verificar que el build funcionó
-        - ls -la packages/shared/dist/
     build:
       commands:
         - cd apps/web && npm run build
   artifacts:
-    baseDirectory: apps/web/.next
+    baseDirectory: apps/web
     files:
-      - '**/*'
+      - '.next/**/*'
+      - 'public/**/*'
+      - 'package.json'
+      - 'next.config.js'
+      - 'node_modules/**/*'
   cache:
     paths:
       - node_modules/**/*
@@ -23,4 +25,3 @@ frontend:
       - packages/shared/dist/**/*
       - apps/web/node_modules/**/*
       - apps/web/.next/cache/**/*
-
