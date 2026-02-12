@@ -3,18 +3,15 @@ frontend:
   phases:
     preBuild:
       commands:
-        # Instalar dependencias de la raíz
-        - npm ci --legacy-peer-deps
+        # Instalar todas las dependencias del workspace
+        - npm install --legacy-peer-deps
         # Compilar paquete shared primero
-        - cd packages/shared
-        - npm ci
-        - npm run build
-        # Volver a raíz e instalar dependencias del frontend
-        - cd ../../apps/web
-        - npm ci --legacy-peer-deps
+        - cd packages/shared && npm run build && cd ../..
+        # Verificar que el build funcionó
+        - ls -la packages/shared/dist/
     build:
       commands:
-        - npm run build
+        - cd apps/web && npm run build
   artifacts:
     baseDirectory: apps/web/.next
     files:
