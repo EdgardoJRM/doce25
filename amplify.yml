@@ -3,13 +3,12 @@ frontend:
   phases:
     preBuild:
       commands:
-        # Instalar dependencias del workspace
+        # Instalar todas las dependencias del workspace
         - npm install --legacy-peer-deps
-        # Build shared package primero
+        # Compilar paquete shared primero
         - cd packages/shared && npm run build && cd ../..
     build:
       commands:
-        # Build Next.js desde apps/web
         - cd apps/web && npm run build
   artifacts:
     baseDirectory: apps/web/.next
@@ -20,4 +19,5 @@ frontend:
       - apps/web/.next/cache/**/*
       - apps/web/node_modules/**/*
       - node_modules/**/*
+      - packages/shared/node_modules/**/*
       - packages/shared/dist/**/*
