@@ -1,0 +1,77 @@
+=================================
+FASE 1 - SES EMAIL CONFIGURATION
+=================================
+Timestamp: $(date)
+
+=== Verificar dominio doce25.org ===
+{
+    "VerificationAttributes": {}
+}
+
+=== Verificar email info@doce25.org ===
+{
+    "VerificationAttributes": {}
+}
+
+=== SES Account Status ===
+{
+    "Enabled": true
+}
+=== Iniciando verificación de dominio ===
+{
+    "VerificationToken": "d1bH1vbchMQOyGw8tmhyxJNOWuaFEwyDJ3BpJr+qKCY="
+}
+
+=== Generando DKIM para dominio ===
+{
+    "DkimTokens": [
+        "ivbmxtoe6lpixfvz3gn2vqreuovuimz4",
+        "smsq3ug5fv3gdl4xpi7xow5ncunhabwg",
+        "vh3zdmlri47u5rtdwd2pmzlu3fb6i5sv"
+    ]
+}
+
+=== Verificando email info@doce25.org ===
+
+=== Verificando email alternativo no-reply@doce25.org ===
+=== Verificando Sandbox Status ===
+{
+    "DedicatedIpAutoWarmupEnabled": true,
+    "EnforcementStatus": "HEALTHY",
+    "ProductionAccessEnabled": true,
+    "SendQuota": {
+        "Max24HourSend": 50000.0,
+        "MaxSendRate": 14.0,
+        "SentLast24Hours": 0.0
+    },
+    "SendingEnabled": true,
+    "SuppressionAttributes": {
+        "SuppressedReasons": [
+            "BOUNCE",
+            "COMPLAINT"
+        ]
+    },
+    "Details": {
+        "MailType": "MARKETING",
+        "WebsiteURL": "https://edgardohernandez.com/",
+        "ContactLanguage": "EN",
+        "UseCaseDescription": "Greetings, my name is Edgardo Hernández, owner of Hernández Media LLC\n\nI hereby request, as far as possible, of course, after the initial evaluation, leave the trial period to be able to use your wonderful email marketing product.\n\nIn my business we help small and medium businesses with their business needs, whether it is creation, strategy, implementation and scaling.\n\nWithin our tools to communicate with our community, it is vital to use emails as a means to update them on our work, consulting, seminars, workshops, digital marketing services and the products we have to help them achieve their goals.\n\nThat said, I would like to let you know that our list is made up of subscribers who have freely and voluntarily registered through the purchase of our services, products or educational material.\n\nWe have taken measures so that bounced emails are automatically removed from my list of subscribers and thus avoid problems.\n\nWe have always used an external tool to work our email marketing, but recently, we recreated our website, we changed our hosting provider to Cloudways. \n\nBecause we plan to scale our online services and manage everything from the website and for them, we have acquired FluentCRM, and we understand that the best combination is with Amazon SES.\n\nI remain attentive to your comments, do not hesitate to contact me to clarify any doubts.\n\nThank You in advance! ",
+        "AdditionalContactEmailAddresses": [
+            "edgardo@edgardohernandez.com",
+            "gabriel@edgardohernandez.com",
+            "edgardo.spa@gmail.com"
+        ],
+        "ReviewDetails": {
+            "Status": "GRANTED",
+            "CaseId": "11003955581"
+        }
+    }
+}
+
+=== RESUMEN SES ===
+Dominio: doce25.org - PENDING (requiere DNS)
+Email info@doce25.org - PENDING (requiere clic en email)
+Email no-reply@doce25.org - PENDING (requiere clic en email)
+Sandbox: Ver output arriba
+
+SIGUIENTE ACCIÓN: Configurar DNS records (ver DNS-RECORDS-REQUIRED.txt)

@@ -1,0 +1,22 @@
+{
+  "apiUrl": "https://gm48tt29h6.execute-api.us-east-1.amazonaws.com",
+  "region": "us-east-1",
+  "stage": "prod",
+  "tables": {
+    "events": "doce25-events-api-events-prod",
+    "registrations": "doce25-events-api-registrations-prod"
+  },
+  "bucket": "doce25-events-api-assets-prod",
+  "functions": [
+    "doce25-events-api-prod-listEvents",
+    "doce25-events-api-prod-getEvent",
+    "doce25-events-api-prod-registerForEvent",
+    "doce25-events-api-prod-scanAttendance",
+    "doce25-events-api-prod-listAdminEvents",
+    "doce25-events-api-prod-createEvent",
+    "doce25-events-api-prod-updateEvent",
+    "doce25-events-api-prod-getEventRegistrations",
+    "doce25-events-api-prod-exportRegistrations",
+    "doce25-events-api-prod-resendQR"
+  ]
+}

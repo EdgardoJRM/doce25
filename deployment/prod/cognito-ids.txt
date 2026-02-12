@@ -1,0 +1,3 @@
+USER_POOL_ID=us-east-1_gHRnw9X0K
+CLIENT_ID=
+CLIENT_ID=2jvnhq3jdars6atcoo66knda05

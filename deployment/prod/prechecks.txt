@@ -1,0 +1,25 @@
+=================================
+FASE 0 - PRECHECKS
+=================================
+Timestamp: $(date)
+
+v18.20.8
+
+10.8.2
+
+aws-cli/2.24.23 Python/3.12.9 Darwin/24.6.0 exe/x86_64
+
+
+                   ✔ Installed Serverless Framework v4.31.2
+
+Serverless ϟ Framework 4.31.2
+
+=== AWS Identity ===
+{
+    "UserId": "AIDARQZFRIAJCRYEODQ3I",
+    "Account": "104768552978",
+    "Arn": "arn:aws:iam::104768552978:user/precot-backup-user"
+}
+
+=== AWS Region ===
+us-east-1

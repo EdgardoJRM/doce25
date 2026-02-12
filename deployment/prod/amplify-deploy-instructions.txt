@@ -1,0 +1,47 @@
+================================================================================
+INSTRUCCIONES PARA DEPLOY EN AWS AMPLIFY
+================================================================================
+
+1. CREAR APP AMPLIFY (si no existe):
+   - Ir a AWS Console → Amplify → Host web app
+   - Conectar repositorio Git (GitHub/GitLab/Bitbucket)
+   - Branch: main (o la rama de producción)
+
+2. CONFIGURAR BUILD SETTINGS:
+   
+   Build specification (amplify.yml):
+   version: 1
+   frontend:
+     phases:
+       preBuild:
+         commands:
+           - cd apps/web
+           - npm ci --legacy-peer-deps
+       build:
+         commands:
+           - npm run build
+     artifacts:
+       baseDirectory: apps/web/.next
+       files:
+         - '**/*'
+     cache:
+       paths:
+         - apps/web/node_modules/**/*
+         - apps/web/.next/cache/**/*
+
+3. CONFIGURAR VARIABLES DE ENTORNO EN AMPLIFY:
+   
+   NEXT_PUBLIC_API_BASE_URL=https://gm48tt29h6.execute-api.us-east-1.amazonaws.com
+   NEXT_PUBLIC_COGNITO_USER_POOL_ID=us-east-1_gHRnw9X0K
+   NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID=2jvnhq3jdars6atcoo66knda05
+   NEXT_PUBLIC_AWS_REGION=us-east-1
+
+4. DEPLOY:
+   - Amplify detectará cambios automáticamente si está conectado a Git
+   - O hacer "Redeploy this version" manualmente
+
+5. CAPTURAR URL:
+   - La URL default será algo como: https://main.xxxxx.amplifyapp.com
+   - Guardar esta URL para configurar dominio después
+
+================================================================================

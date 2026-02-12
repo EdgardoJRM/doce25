@@ -1,0 +1,243 @@
+service: doce25-events-api
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  memorySize: 512
+  timeout: 30
+  environment:
+    EVENTS_TABLE: ${self:custom.eventsTable}
+    REGISTRATIONS_TABLE: ${self:custom.registrationsTable}
+    ASSETS_BUCKET: ${self:custom.assetsBucket}
+    FROM_EMAIL: ${env:FROM_EMAIL, 'info@doce25.org'}
+    PUBLIC_BASE_URL: ${env:PUBLIC_BASE_URL, 'https://events.doce25.org'}
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
+  
+  httpApi:
+    authorizers:
+      cognitoAuthorizer:
+        type: jwt
+        identitySource: $request.header.Authorization
+        issuerUrl: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_gHRnw9X0K
+        audience:
+          - 2jvnhq3jdars6atcoo66knda05
+  
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - !GetAtt EventsTable.Arn
+            - !GetAtt RegistrationsTable.Arn
+            - !Join ['/', [!GetAtt RegistrationsTable.Arn, 'index', '*']]
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+            - s3:GetObject
+            - s3:DeleteObject
+          Resource:
+            - !Join ['/', [!GetAtt AssetsBucket.Arn, '*']]
+        - Effect: Allow
+          Action:
+            - ses:SendEmail
+            - ses:SendRawEmail
+          Resource: '*'
+
+custom:
+  eventsTable: ${self:service}-events-${self:provider.stage}
+  registrationsTable: ${self:service}-registrations-${self:provider.stage}
+  assetsBucket: ${self:service}-assets-${self:provider.stage}
+  
+  esbuild:
+    bundle: true
+    minify: false
+    sourcemap: true
+    exclude: 
+      - 'aws-sdk'
+      - '@aws-sdk'
+    target: 'node20'
+    platform: 'node'
+    concurrency: 10
+  
+  serverless-offline:
+    httpPort: 3001
+    lambdaPort: 3002
+
+functions:
+  # Public endpoints
+  listEvents:
+    handler: src/handlers/events/list.handler
+    events:
+      - httpApi:
+          path: /events
+          method: get
+          cors: true
+  
+  getEvent:
+    handler: src/handlers/events/get.handler
+    events:
+      - httpApi:
+          path: /events/{eventId}
+          method: get
+          cors: true
+  
+  registerForEvent:
+    handler: src/handlers/registrations/register.handler
+    events:
+      - httpApi:
+          path: /events/{eventId}/register
+          method: post
+          cors: true
+  
+  # Staff endpoints (protected)
+  scanAttendance:
+    handler: src/handlers/attendance/scan.handler
+    events:
+      - httpApi:
+          path: /attendance/scan
+          method: post
+          authorizer:
+            name: cognitoAuthorizer
+  
+  # Admin endpoints (protected)
+  listAdminEvents:
+    handler: src/handlers/admin/events/list.handler
+    events:
+      - httpApi:
+          path: /admin/events
+          method: get
+          authorizer:
+            name: cognitoAuthorizer
+  
+  createEvent:
+    handler: src/handlers/admin/events/create.handler
+    events:
+      - httpApi:
+          path: /admin/events
+          method: post
+          authorizer:
+            name: cognitoAuthorizer
+  
+  updateEvent:
+    handler: src/handlers/admin/events/update.handler
+    events:
+      - httpApi:
+          path: /admin/events/{eventId}
+          method: put
+          authorizer:
+            name: cognitoAuthorizer
+  
+  getEventRegistrations:
+    handler: src/handlers/admin/registrations/list.handler
+    events:
+      - httpApi:
+          path: /admin/events/{eventId}/registrations
+          method: get
+          authorizer:
+            name: cognitoAuthorizer
+  
+  exportRegistrations:
+    handler: src/handlers/admin/registrations/export.handler
+    events:
+      - httpApi:
+          path: /admin/events/{eventId}/export
+          method: get
+          authorizer:
+            name: cognitoAuthorizer
+  
+  resendQR:
+    handler: src/handlers/admin/registrations/resend-qr.handler
+    events:
+      - httpApi:
+          path: /admin/events/{eventId}/resend-qr
+          method: post
+          authorizer:
+            name: cognitoAuthorizer
+
+resources:
+  Resources:
+    # DynamoDB Tables
+    EventsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.eventsTable}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: event_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: event_id
+            KeyType: HASH
+    
+    RegistrationsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.registrationsTable}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: event_id
+            AttributeType: S
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: event_id
+            KeyType: HASH
+          - AttributeName: email
+            KeyType: RANGE
+    
+    # S3 Bucket for QR codes and exports
+    AssetsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.assetsBucket}
+        BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+        CorsConfiguration:
+          CorsRules:
+            - AllowedOrigins:
+                - '*'
+              AllowedMethods:
+                - GET
+              AllowedHeaders:
+                - '*'
+              MaxAge: 3000
+
+  Outputs:
+    ApiUrl:
+      Description: API Gateway endpoint URL
+      Value: !Sub https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com
+    
+    EventsTableName:
+      Description: DynamoDB Events table name
+      Value: !Ref EventsTable
+    
+    RegistrationsTableName:
+      Description: DynamoDB Registrations table name
+      Value: !Ref RegistrationsTable
+    
+    AssetsBucketName:
+      Description: S3 Assets bucket name
+      Value: !Ref AssetsBucket
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+

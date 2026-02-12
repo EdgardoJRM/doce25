@@ -1,0 +1,17 @@
+{
+  "comment": "Test event para validar el envío de email con QR como attachment",
+  "instructions": [
+    "1. Asegúrate de que SES esté configurado y el email de destino verificado",
+    "2. Crea un QR de prueba o usa uno existente",
+    "3. Invoca directamente la función sendQREmail con un buffer de prueba",
+    "4. Verifica en tu cliente de email que el attachment llegue correctamente"
+  ],
+  "testData": {
+    "to": "test@example.com",
+    "fullName": "Pérez García, Juan",
+    "eventTitle": "Beach Cleanup - Playa Flamenco",
+    "eventDate": "viernes, 15 de marzo de 2025, 08:00 AM",
+    "note": "qrBuffer debe ser un Buffer con datos PNG válidos"
+  }
+}
+

@@ -1,0 +1,15 @@
+{
+  "body": "{\"title\":\"Beach Cleanup - Playa Flamenco\",\"description\":\"Únete a nosotros en una jornada de limpieza en una de las playas más hermosas de Puerto Rico. Traeremos bolsas, guantes y todo el equipo necesario. Solo necesitas traer tu entusiasmo, protector solar y agua. La actividad incluye una charla educativa sobre conservación marina y el impacto de los plásticos en nuestros océanos.\\n\\nActividades:\\n- Limpieza de playa (2 horas)\\n- Charla educativa (30 minutos)\\n- Clasificación de residuos\\n- Registro de datos para investigación\",\"location\":\"Playa Flamenco, Culebra, PR (Punto de encuentro: Kiosco de información)\",\"startDateTime\":\"2025-04-15T08:00:00.000Z\",\"endDateTime\":\"2025-04-15T12:00:00.000Z\",\"capacity\":100,\"waiverRequired\":true}",
+  "requestContext": {
+    "authorizer": {
+      "jwt": {
+        "claims": {
+          "sub": "admin-user-id",
+          "email": "admin@doce25.org",
+          "cognito:groups": "admin"
+        }
+      }
+    }
+  }
+}
+

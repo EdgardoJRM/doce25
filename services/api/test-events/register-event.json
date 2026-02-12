@@ -1,0 +1,13 @@
+{
+  "pathParameters": {
+    "eventId": "replace-with-actual-event-id"
+  },
+  "body": "{\"email\":\"test@example.com\",\"fullName\":\"González Rivera, Juan\",\"phone\":\"787-123-4567\",\"ageRange\":\"25-34 años\",\"gender\":\"Masculino\",\"city\":\"San Juan\",\"organization\":\"Doce25\",\"waiver\":{\"acceptances\":{\"s8\":true,\"s9\":true,\"s10\":true,\"s11\":true,\"s12\":true,\"s13\":true,\"s14\":true,\"s15\":true,\"s16\":true,\"s17\":true,\"s18\":true},\"signatureName\":\"Juan González Rivera\",\"signedDate\":\"2025-03-15\"}}",
+  "requestContext": {
+    "http": {
+      "sourceIp": "192.168.1.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    }
+  }
+}
+

@@ -1,0 +1,88 @@
+================================================================================
+REGISTROS DNS REQUERIDOS PARA SES Y DOMINIO
+================================================================================
+Fecha: 2025-03-09
+Dominio: doce25.org
+
+================================================================================
+1. VERIFICACIÓN DE DOMINIO SES
+================================================================================
+Tipo: TXT
+Nombre: _amazonses.doce25.org
+Valor: d1bH1vbchMQOyGw8tmhyxJNOWuaFEwyDJ3BpJr+qKCY=
+TTL: 1800
+
+================================================================================
+2. DKIM (3 REGISTROS CNAME)
+================================================================================
+
+DKIM 1:
+Tipo: CNAME
+Nombre: ivbmxtoe6lpixfvz3gn2vqreuovuimz4._domainkey.doce25.org
+Valor: ivbmxtoe6lpixfvz3gn2vqreuovuimz4.dkim.amazonses.com
+TTL: 1800
+
+DKIM 2:
+Tipo: CNAME
+Nombre: smsq3ug5fv3gdl4xpi7xow5ncunhabwg._domainkey.doce25.org
+Valor: smsq3ug5fv3gdl4xpi7xow5ncunhabwg.dkim.amazonses.com
+TTL: 1800
+
+DKIM 3:
+Tipo: CNAME
+Nombre: vh3zdmlri47u5rtdwd2pmzlu3fb6i5sv._domainkey.doce25.org
+Valor: vh3zdmlri47u5rtdwd2pmzlu3fb6i5sv.dkim.amazonses.com
+TTL: 1800
+
+================================================================================
+3. EMAILS A VERIFICAR
+================================================================================
+Los siguientes emails recibirán un correo de verificación de AWS SES:
+- info@doce25.org
+- no-reply@doce25.org
+
+ACCIÓN REQUERIDA: Hacer clic en el link de verificación en cada email.
+
+================================================================================
+4. VERIFICAR SANDBOX STATUS
+================================================================================
+Por defecto, SES está en SANDBOX mode, lo que significa:
+- Solo puedes enviar emails a direcciones verificadas
+- Límite de 200 emails/día
+- 1 email/segundo
+
+Para PRODUCCIÓN, debes solicitar salir de sandbox:
+1. Ir a AWS Console → SES → Account dashboard
+2. Click "Request production access"
+3. Llenar formulario:
+   - Use case: Event registration system for non-profit foundation
+   - Website: https://doce25.org
+   - Compliance: We have permission to email registrants
+   - Expected volume: 500-1000 emails/month
+   - Bounce/complaint handling: Monitored via CloudWatch
+
+Aprobación típica: 24-48 horas
+
+================================================================================
+5. ROUTE53 (SI DOMINIO ESTÁ EN ROUTE53)
+================================================================================
+Si doce25.org está en Route53, puedes crear estos records automáticamente:
+
+aws route53 change-resource-record-sets --hosted-zone-id <ZONE_ID> --change-batch file://dns-changes.json
+
+Donde dns-changes.json contiene los records de arriba.
+
+Para encontrar el Hosted Zone ID:
+aws route53 list-hosted-zones --query "HostedZones[?Name=='doce25.org.'].Id" --output text
+
+================================================================================
+6. VALIDACIÓN POST-CONFIGURACIÓN
+================================================================================
+Después de agregar los DNS records, esperar 5-10 minutos y verificar:
+
+aws ses get-identity-verification-attributes --identities doce25.org --region us-east-1
+
+El "VerificationStatus" debe cambiar de "Pending" a "Success"
+
+================================================================================
+
