@@ -8,6 +8,14 @@ import { adminApi, publicApi } from '@/lib/api';
 import { isAdmin } from '@/lib/auth';
 import { Event, Registration } from '@doce25/shared';
 
+export const dynamicParams = true;
+
+export function generateStaticParams() {
+  // With output: 'export', we can't fetch during build
+  // Return empty array - pages will be handled client-side
+  return [];
+}
+
 export default function EventRegistrationsPage() {
   const params = useParams();
   const router = useRouter();

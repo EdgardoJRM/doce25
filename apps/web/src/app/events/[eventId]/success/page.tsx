@@ -1,6 +1,14 @@
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 
+export const dynamicParams = true;
+
+export function generateStaticParams() {
+  // With output: 'export', we can't fetch during build
+  // Return empty array - pages will be handled client-side
+  return [];
+}
+
 export default function RegistrationSuccessPage() {
   return (
     <>

@@ -44,3 +44,13 @@ yarn-error.log*
 # Misc
 *.tsbuildinfo
 
+# AWS Audit files (contain secrets)
+aws-audit/
+FINOPS-ANALYSIS.md
+QUICK-START-FINOPS.md
+README-AUDIT.md
+audit.sh
+finoops-master.sh
+phase1-quick-wins.sh
+verify-unknown.sh
+

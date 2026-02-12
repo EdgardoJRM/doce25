@@ -21,6 +21,14 @@ import {
 
 type Step = 1 | 2 | 3 | 4;
 
+export const dynamicParams = true;
+
+export function generateStaticParams() {
+  // With output: 'export', we can't fetch during build
+  // Return empty array - pages will be handled client-side
+  return [];
+}
+
 export default function RegisterPage() {
   const params = useParams();
   const router = useRouter();

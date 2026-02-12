@@ -7,6 +7,14 @@ import Navbar from '@/components/Navbar';
 import { publicApi } from '@/lib/api';
 import { Event } from '@doce25/shared';
 
+export const dynamicParams = true;
+
+export function generateStaticParams() {
+  // With output: 'export', we can't fetch during build
+  // Return empty array - pages will be handled client-side
+  return [];
+}
+
 export default function EventDetailPage() {
   const params = useParams();
   const router = useRouter();
