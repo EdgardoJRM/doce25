@@ -1,14 +1,27 @@
-import RegisterClient from '@/components/RegisterClient';
+'use client';
 
-export const dynamicParams = true;
+import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import Navbar from '@/components/Navbar';
+import { publicApi } from '@/lib/api';
+import {
+  Event,
+  RegistrationInput,
+  AgeRange,
+  Gender,
+  City,
+  Organization,
+  AGE_RANGES,
+  GENDERS,
+  CITIES,
+  ORGANIZATIONS,
+  WAIVER_SECTIONS,
+  WaiverAcceptances,
+} from '@doce25/shared';
 
-export function generateStaticParams() {
-  return [];
-}
+type Step = 1 | 2 | 3 | 4;
 
-export default function RegisterPage() {
-  return <RegisterClient />;
-}
+export default function RegisterClient() {
   const params = useParams();
   const router = useRouter();
   const eventId = params.eventId as string;

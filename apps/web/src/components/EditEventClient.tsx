@@ -1,14 +1,13 @@
-import EditEventClient from '@/components/EditEventClient';
+'use client';
 
-export const dynamicParams = true;
+import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import Navbar from '@/components/Navbar';
+import { adminApi, publicApi } from '@/lib/api';
+import { isAdmin } from '@/lib/auth';
+import { Event, EventStatus } from '@doce25/shared';
 
-export function generateStaticParams() {
-  return [];
-}
-
-export default function EditEventPage() {
-  return <EditEventClient />;
-}
+export default function EditEventClient() {
   const params = useParams();
   const router = useRouter();
   const eventId = params.eventId as string;

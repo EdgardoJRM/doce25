@@ -1,14 +1,14 @@
-import EventRegistrationsClient from '@/components/EventRegistrationsClient';
+'use client';
 
-export const dynamicParams = true;
+import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Navbar from '@/components/Navbar';
+import { adminApi, publicApi } from '@/lib/api';
+import { isAdmin } from '@/lib/auth';
+import { Event, Registration } from '@doce25/shared';
 
-export function generateStaticParams() {
-  return [];
-}
-
-export default function EventRegistrationsPage() {
-  return <EventRegistrationsClient />;
-}
+export default function EventRegistrationsClient() {
   const params = useParams();
   const router = useRouter();
   const eventId = params.eventId as string;
