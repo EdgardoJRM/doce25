@@ -2,7 +2,11 @@
 const nextConfig = {
   transpilePackages: ['@doce25/shared'],
   reactStrictMode: true,
-  // Removed 'standalone' output for Amplify compatibility
+  output: 'export',
+  trailingSlash: true,
+  images: {
+    unoptimized: true,
+  },
 };
 
 module.exports = nextConfig;
